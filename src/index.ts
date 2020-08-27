@@ -3,10 +3,10 @@ import cors from 'cors';
 import diaryRouter from './routes/diaries';
 import diagnoseRouter from './routes/diagnoses';
 import patientRouter from './routes/patients';
-
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 const PORT = 3001;
 
@@ -17,7 +17,6 @@ app.get('/ping', (_req, res) => {
 
 // ohjataan diaryRouter jossa vain '/' tähän päätteeseen. Helppoa
 app.use('/api/diaries', diaryRouter);
-
 app.use('/api/diagnoses', diagnoseRouter);
 app.use('/api/patients', patientRouter);
 
