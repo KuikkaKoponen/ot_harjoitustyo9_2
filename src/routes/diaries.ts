@@ -1,6 +1,6 @@
 import express from 'express';
 import diaryService from '../services/diaryService';
-import toNewDiaryEntry from '../utils';
+import utils from '../utils';
 
 const router = express.Router();
 
@@ -21,11 +21,12 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   try {
-    const newDiaryEntry = toNewDiaryEntry(req.body);
+    const newDiaryEntry = utils.toNewDiaryEntry(req.body);
 
     const addedEntry = diaryService.addDiary(newDiaryEntry);
     res.json(addedEntry);
   } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     res.status(400).send(e.message);
   }
 });

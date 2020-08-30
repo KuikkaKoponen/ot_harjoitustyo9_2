@@ -1,5 +1,5 @@
 import patients from '../../data/patientsTs';
-import { NonSensitivePatientEntry, PatientEntry } from '../types';
+import { NonSensitivePatientEntry, PatientEntry, NewPatientEntry } from '../types';
 
 const getEntries = () : PatientEntry[] => {
   return patients;
@@ -15,12 +15,18 @@ const getNonSensitiveEntries = (): NonSensitivePatientEntry [] => {
   }));
 };
 
-const addEntry = () => {
-  return null;
+const addPatient = ( entry: NewPatientEntry ): PatientEntry => {
+  const newPatientEntry = {
+    id: "Pitäis tehdä tähän joku id generaattori",
+    ...entry
+  };
+
+  patients.push(newPatientEntry);
+  return newPatientEntry;
 };
 
 export default {
   getEntries,
-  addEntry,
+  addPatient,
   getNonSensitiveEntries
 };

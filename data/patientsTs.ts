@@ -1,6 +1,7 @@
 import { PatientEntry } from "../src/types";
+import utils from "../src/utils";
 
-const patientEntries: Array<PatientEntry> = [
+const data = [
   {
       "id": "d2773336-f723-11e9-8f0b-362b9e155667",
       "name": "John McClane",
@@ -42,5 +43,14 @@ const patientEntries: Array<PatientEntry> = [
       "occupation": "Digital evangelist"
   }
 ];
+
+// PatientEntry-taulukko
+// Palautetaan lista PatientEntry muodossa (pelkkää stringiä nyt)
+const patientEntries: PatientEntry [] = data.map(obj => {
+    const object = utils.toNewPatientEntry(obj) as PatientEntry;
+    object.id = obj.id;
+    return object;
+  });
+
 
 export default patientEntries;
