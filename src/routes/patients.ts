@@ -2,11 +2,24 @@ import express from 'express';
 import patientService from '../services/patientService';
 import utils from '../utils';
 
+// routeri
+
 const router = express.Router();
 
 router.get('/', (_req, res) => {
   res.send(patientService.getNonSensitiveEntries());
 });
+
+
+router.get('/:id', (_req, res) => {
+  try {
+    res.send(patientService.findPatient(_req.params.id));
+  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    res.status(400).send(e.message);
+  }
+});
+
 
 router.post('/', (req, res) => {
   try {

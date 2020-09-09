@@ -18,9 +18,10 @@ export enum Visibility {
 }
 
 export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>; // DiaryEntry mutta comment excludattu
-export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>; 
 export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
 export type NewPatientEntry = Omit<PatientEntry, 'id'>;
+export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn' | 'entries' >; // HUOM! korjaa entries pois jossain vaiheessa
+export type PublicPatient = Omit<PatientEntry, 'ssn' | 'entries' >; // HUOM! korjaa entries pois jossain vaiheessa
 
 export interface DiaryEntry {
   id: number;
@@ -43,7 +44,10 @@ export interface PatientEntry {
   ssn: string,
   gender: Gender,
   occupation: string
+  //entries: Entry[]
 }
+
+//type Entry = {id: string};
 
 // Enums are usually used when there is a set of predetermined values which are not expected to change in the future. Usually enums are used for much tighter unchanging values (for example weekdays, months, directions) but since they offer us a great way to validate our incoming values we might as well use them in our case.
 export enum Gender {

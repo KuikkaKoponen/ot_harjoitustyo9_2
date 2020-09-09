@@ -4,6 +4,8 @@
 import { NewDiaryEntry, Weather, Visibility } from './types';
 import { NewPatientEntry, Gender } from './types';
 
+// saa postin mukana tulleen objectin (type = any), parsii sen ja varmistaa, että vastaa oikee typeä
+
 const toNewDiaryEntry = (object: any): NewDiaryEntry => {
   return {
     date: parseDate(object.date),
