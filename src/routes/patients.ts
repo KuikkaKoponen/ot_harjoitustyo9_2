@@ -20,7 +20,6 @@ router.get('/:id', (_req, res) => {
   }
 });
 
-
 router.post('/', (req, res) => {
   try {
     const newPatientEntry = utils.toNewPatientEntry(req.body);

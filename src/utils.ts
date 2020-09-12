@@ -25,6 +25,7 @@ const toNewPatientEntry = (object: any): NewPatientEntry => {
   };
 };
 
+
 // If the type guard function returns true, the TypeScript compiler knows that the tested variable has the type that was defined in the type predicate
 // isString is a function which returns a boolean and which has a type predicate as the return type
 const isString = (text: any): text is string => {  // 'text is string' = type predicate // eli ilmeisesti kertoo boolean lisäksi tyypin

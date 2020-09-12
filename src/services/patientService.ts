@@ -1,6 +1,7 @@
 // hakee datan, muokkaa dataa ja lisää uutta dataa.
 import patients from '../../data/patientsTs';
-import { NonSensitivePatientEntry, PatientEntry, NewPatientEntry } from '../types';
+import patientEntries from '../../data/entriesTs';
+import {NonSensitivePatientEntry, PatientEntry, NewPatientEntry } from '../types';
 
 const getEntries = () : PatientEntry[] => {
   return patients;
@@ -17,22 +18,23 @@ const getNonSensitiveEntries = (): NonSensitivePatientEntry [] => {
 };
 
 // Katso läpi
-const findPatient = (id: string): NonSensitivePatientEntry => {
+const findPatient = (id: string): PatientEntry => {
   const patient = patients.find(patient => patient.id === id);
   
   if (!patient ) {
     throw new Error('Incorrect or missing id');
   }
-
-  const copy = Object.assign({}, patient);
-  delete copy.ssn;
+  // Patient data
+  const entries = patientEntries.filter(entry => entry.ssn === patient.ssn);
+  // Let's create union
+  const copy = Object.assign({entries}, patient);
   return copy;
+  
 };
-
 
 const addPatient = ( entry: NewPatientEntry ): PatientEntry => {
   const newPatientEntry = {
-    id: Math.floor(Math.random() * 1000).toString(), // ID generaattori
+    id: Math.floor(Math.random() * 1000).toString(), // ID-generaattori
     ...entry
   };
 

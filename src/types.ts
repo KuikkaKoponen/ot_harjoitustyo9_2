@@ -21,7 +21,8 @@ export type NonSensitiveDiaryEntry = Omit<DiaryEntry, 'comment'>; // DiaryEntry 
 export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
 export type NewPatientEntry = Omit<PatientEntry, 'id'>;
 export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn' | 'entries' >; // HUOM! korjaa entries pois jossain vaiheessa
-export type PublicPatient = Omit<PatientEntry, 'ssn' | 'entries' >; // HUOM! korjaa entries pois jossain vaiheessa
+export type PublicPatient = Omit<PatientEntry, 'ssn' | 'entries'>;
+//export type PublicPatient = Omit<PatientEntry, 'ssn' | 'entries'>;
 
 export interface DiaryEntry {
   id: number;
@@ -43,8 +44,8 @@ export interface PatientEntry {
   dateOfBirth: string,
   ssn: string,
   gender: Gender,
-  occupation: string
-  //entries: Entry[]
+  occupation: string,
+  entries?: Entry[]
 }
 
 //type Entry = {id: string};
@@ -54,5 +55,17 @@ export enum Gender {
   Male = 'male',
   Female = 'female',
   Other = 'other'
+}
+
+// i.e. description, creation date, information regarding the specialist who created it and possible diagnosis codes. Diagnosis codes map to the ICD-10 codes returned from the /api/diagnoses endpoint. 
+// Our naive implementation will be that a patient has an array of entries.
+
+export interface Entry {
+  id: string;
+  ssn: string;
+  description: string;
+  creationDate: string;
+  specialist: string;
+  diagnosis: string
 }
 
