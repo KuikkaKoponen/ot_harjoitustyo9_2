@@ -60,12 +60,44 @@ export enum Gender {
 // i.e. description, creation date, information regarding the specialist who created it and possible diagnosis codes. Diagnosis codes map to the ICD-10 codes returned from the /api/diagnoses endpoint. 
 // Our naive implementation will be that a patient has an array of entries.
 
-export interface Entry {
+interface BaseEntry {
   id: string;
-  ssn: string;
   description: string;
-  creationDate: string;
+  date: string;
   specialist: string;
-  diagnosis: string
+  diagnosisCodes?: Array<DiagnoseEntry['code']>;
 }
+
+
+export enum HealthCheckRating {
+  "Healthy" = 0,
+  "LowRisk" = 1,
+  "HighRisk" = 2,
+  "CriticalRisk" = 3
+}
+
+interface HealthCheckEntry extends BaseEntry {
+  type: "HealthCheck";
+  healthCheckRating: HealthCheckRating;
+}
+
+interface HospitalEntry extends BaseEntry {
+  type: "Hospital";
+  description: string;
+  discharge: {date: string, criteria: string };
+}
+
+interface OccupationalHealthcareEntry extends BaseEntry {
+  type: "OccupationalHealthcare";
+  description: string;
+  employerName: string;
+  sickLeave?: {startDate: string, endDate: string };
+  
+}
+
+export type Entry =
+  | HospitalEntry
+  | OccupationalHealthcareEntry
+  | HealthCheckEntry;
+
 

@@ -23,7 +23,6 @@ router.get('/:id', (_req, res) => {
 router.post('/', (req, res) => {
   try {
     const newPatientEntry = utils.toNewPatientEntry(req.body);
-
     const addedEntry = patientService.addPatient(newPatientEntry);
     res.json(addedEntry);
   } catch (e) {
