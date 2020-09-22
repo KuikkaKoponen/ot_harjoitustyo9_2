@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NewDiaryEntry, Weather, Visibility } from './types';
-import { NewPatientEntry, Gender } from './types';
+import { NewPatientEntry, Gender, Entry, SickLeave, Discharge, HealthCheckRating } from './types';
 
 // saa postin mukana tulleen objectin (type = any), parsii sen ja varmistaa, että vastaa oikee typeä
 
@@ -21,10 +21,120 @@ const toNewPatientEntry = (object: any): NewPatientEntry => {
     dateOfBirth: parseDate(object.dateOfBirth),
     ssn: parseString(object.ssn),
     gender: parseGender(object.gender),
-    occupation: parseString(object.occupation),
+    occupation: parseString(object.occupation)
   };
 };
 
+const toNewEntry = (object: any): Entry => { 
+  // Baseentry: id, date, description, specialist, diagnosisCodes?
+  // HealthCheckEntry: type, healthCheckRating
+  // HospitalEntry: type, description, discharge
+  // OccupationalHealthcareEntry: type, description, employer, sickLeave, 
+  
+  let entry = {
+    id: parseString(object.id),
+    description: parseString(object.description),
+    date: parseDate(object.date),
+    specialist: parseString(object.specialist)
+  };
+
+  if (object.diagnosisCodes) {
+      const diagnoses = {diagnoses: parseStringArray(object.diagnosisCodes)};
+      entry = Object.assign(entry, diagnoses);
+  }
+
+  switch (object.type) {
+    case "Hospital":
+      const a = {
+        type: parseString(object.type),
+        description: parseString(object.description),
+        discharge: parseDischarge(object.discharge)
+      };
+      entry = Object.assign(entry, a);
+      break;
+    case "OccupationalHealthcare":
+      const b = {
+        type: parseString(object.type),
+        description: parseString(object.description),
+        employerName: parseString(object.employerName), 
+      };
+      if (object.sickLeave) {
+        const sickLeave = {sickLeave: parseSickLeave(object.sickLeave)};
+        entry = Object.assign(entry, b, sickLeave);
+      } else {
+        entry = Object.assign(entry, b);
+    }  
+      break;
+    case "HealthCheck":
+      const c = {
+        type: parseString(object.type),
+        healthCheckRating: parsehealthCheckRating(object.healthCheckRating), 
+      };
+      entry = Object.assign(entry, c);
+      break;
+    default: 
+      throw new Error('entry type missing');
+  }
+  
+  return entry;
+};  
+
+
+const isHealthCheckRating = (param: any): param is HealthCheckRating => {
+  // tämä on boolean
+  console.log(param);
+  return Object.values(HealthCheckRating).includes(param);
+};
+
+
+const parsehealthCheckRating = (number: any): HealthCheckRating => {
+  // jostain syystä nolla (0) tulkitaan !number nulliksi/falseksi
+  if (!isHealthCheckRating(number)) {
+    throw new Error('Incorrect or missing helthcheck rating');
+  }
+  return number;
+};  
+
+
+const parseStringArray = (array: any): string[] => {
+  if (!array || !Array.isArray(array)) {
+    throw new Error('Incorrect or missing array');
+  }
+  const checkedArray = array.map(item => parseString(item));
+  if (checkedArray) {
+    return checkedArray;
+  }
+  
+  throw new Error('Incorrect or missing array items');  
+};
+
+const isSickLeave = (sickLeave: any): sickLeave is SickLeave => {
+  if (sickLeave.startDate && sickLeave.endDate && isString(sickLeave.startDate) && isString(sickLeave.endDate)) {
+    return true;
+  } else return false;
+};
+
+const parseSickLeave = (sickLeave: any): SickLeave => {
+  if (!sickLeave || !isSickLeave(sickLeave)) {
+    throw new Error('Incorrect or missing sick leave');
+  }
+  return sickLeave;
+};
+
+const isDischarge = (discharge: any): discharge is Discharge => {
+  console.log(discharge);
+  if (discharge.date && discharge.criteria && isString(discharge.date) && isString(discharge.criteria)) {
+    return true;
+  } else return false;
+};
+
+// discharge: {date: string, criteria: string };
+const parseDischarge = (discharge: any): Discharge => {
+  if (!discharge || !isDischarge(discharge) ) {
+    throw new Error('Incorrect or missing discharge');
+  }
+  return discharge;
+};
 
 // If the type guard function returns true, the TypeScript compiler knows that the tested variable has the type that was defined in the type predicate
 // isString is a function which returns a boolean and which has a type predicate as the return type
@@ -101,5 +211,6 @@ const parseGender = (gender: any): Gender => {
 
 export default {
   toNewDiaryEntry,
-  toNewPatientEntry  
+  toNewPatientEntry,
+  toNewEntry  
 };

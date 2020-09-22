@@ -173,3 +173,46 @@ const patientEntries: PatientEntry [] = data.map(obj => {
 export default patientEntries;
 
 */
+
+// TESTAILUUUN
+/*
+{
+    "id": "fcd59fa6-c4b4-4fec-ac4d-df4fe1f85f62",
+    "date": "2019-09-10",
+    "specialist": "MD House",
+    "type": "OccupationalHealthcare",
+    "employerName": "FBI",
+    "description": "Prescriptions renewed",
+    "diagnosisCodes": ["Z57.1", "Z74.3", "M51.2"],
+    "sickLeave": {
+          "startDate": "2019-08-05",
+          "endDate": "2019-08-28"
+    }
+}
+
+{
+    "id": "fcd59fa6-c4b4-4fec-ac4d-df4fe1f85f62",
+    "date": "2019-09-10",
+    "specialist": "MD House",
+    "type": "Hospital",
+    "description": "Prescriptions renewed",
+    "diagnosisCodes": ["Z57.1", "Z74.3", "M51.2"],
+    "discharge": {
+          "date": "2015-01-16",
+          "criteria": "Thumb has healed."
+        }
+}
+
+{
+    "id": "fcd59fa6-c4b4-4fec-ac4d-df4fe1f85f62",
+    "date": "2019-09-10",
+    "specialist": "MD House",
+    "type": "HealthCheck",
+    "employerName": "FBI",
+    "description": "Prescriptions renewed",
+    "healthCheckRating": 3
+
+}
+
+
+*/

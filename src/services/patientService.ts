@@ -1,7 +1,7 @@
 // hakee datan, muokkaa dataa ja lisää uutta dataa.
 import patients from '../../data/patientsTs';
-import {NonSensitivePatientEntry, PatientEntry, NewPatientEntry } from '../types';
-//import diagnoseEntries from '../../data/diagnosesTs';
+import {NonSensitivePatientEntry, PatientEntry, NewPatientEntry} from '../types';
+import diagnoseEntries from '../../data/diagnosesTs';
 
 const getEntries = () : PatientEntry[] => {
   return patients;
@@ -17,33 +17,41 @@ const getNonSensitiveEntries = (): NonSensitivePatientEntry [] => {
   }));
 };
 
-// Katso läpi
 const findPatient = (id: string): PatientEntry => {
+  
   const patient =  patients.find(patient => patient.id === id);
   if (!patient ) {
     throw new Error('Incorrect or missing id');
   }
 
-  // jatka tästä. Googlaa miten listan alkioita saa muokattua
-  if (patient.entries !== undefined) {
+  // Aika karmeen näkönen.
+  if (patient.entries) {
     patient.entries.forEach(entry => {  
       if (entry.diagnosisCodes) {
-        entry.diagnosisCodes.forEach(diagnosisCode => {
-        //const name: string = diagnoseEntries.find(diagnose => diagnose.code === diagnosisCode);
-        const name = "testi";
-        return `${diagnosisCode} ${name}`;
+        entry.diagnosisCodes.forEach((diagnosisCode, index) => { 
+          // en tiedä miksi piti uudestaan laittaa tämä tarkistus
+          if(entry.diagnosisCodes) {
+          // en saanut muuten kuin tällä indeksillä muutettua.
+            entry.diagnosisCodes[index] = returnDiagnosis(diagnosisCode);}
         });
-      }        
+      }
     });
-  }  
-
-  // Patient data
-  //const entries = patientEntries.filter(entry => entry.ssn === patient.ssn);
-  // Let's create union
-  //const copy = Object.assign({entries}, patient);
-  return patient;
+  }
   
+  function returnDiagnosis(code: string ): string {
+      const entry = diagnoseEntries.find(diagnose => diagnose.code === code);
+      if(entry) return code + ": " + entry.name;
+      return code;
+  }
+
+  return patient;  
 };
+
+/*
+const addEntry = (entry: Entry) => {
+  //tallenna uusi entry taulukkoon
+};
+*/
 
 const addPatient = ( entry: NewPatientEntry ): PatientEntry => {
   const newPatientEntry = {

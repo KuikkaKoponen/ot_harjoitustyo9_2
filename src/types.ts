@@ -32,12 +32,6 @@ export interface DiaryEntry {
   comment?: string; // Kysymysmerkki tarkoittaa, että tämä on optional eli ei ole pakko olla
 }
 
-export interface DiagnoseEntry {
-  code: string,
-  name: string,
-  latin?: string
-}
-
 export interface PatientEntry {
   id: string,
   name: string,
@@ -56,6 +50,13 @@ export enum Gender {
   Female = 'female',
   Other = 'other'
 }
+
+export interface DiagnoseEntry {
+  code: string,
+  name: string,
+  latin?: string
+}
+
 
 // i.e. description, creation date, information regarding the specialist who created it and possible diagnosis codes. Diagnosis codes map to the ICD-10 codes returned from the /api/diagnoses endpoint. 
 // Our naive implementation will be that a patient has an array of entries.
@@ -84,20 +85,34 @@ interface HealthCheckEntry extends BaseEntry {
 interface HospitalEntry extends BaseEntry {
   type: "Hospital";
   description: string;
-  discharge: {date: string, criteria: string };
+  discharge: Discharge;
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   description: string;
   employerName: string;
-  sickLeave?: {startDate: string, endDate: string };
-  
+  sickLeave?: SickLeave;
+  //sickLeave?: {startDate: string, endDate: string };
+}
+
+export interface SickLeave {
+  startDate: string; 
+  endDate: string;
+}
+
+export interface Discharge {
+  date: string;
+  criteria: string;
 }
 
 export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
-  | HealthCheckEntry;
+  | HealthCheckEntry
+  | BaseEntry;
+
+  // BaseEntry nyt ekstrana koska muuten toNewEntry funtion return entry herjasi koska luulee, että voisi olla myös pelkkä BaseEntry
+
 
 
