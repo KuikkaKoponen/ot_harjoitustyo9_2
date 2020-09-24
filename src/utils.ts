@@ -76,6 +76,7 @@ const toNewEntry = (object: any): Entry => {
       throw new Error('entry type missing');
   }
   
+  // return luulee, että return voisi olla vain tuo entryn alustus (let entry = {...), jonka vuoksi typeksi piti lisätä myös BaseEntry. En keksinyt muuta keinoa.
   return entry;
 };  
 
@@ -94,7 +95,6 @@ const parsehealthCheckRating = (number: any): HealthCheckRating => {
   }
   return number;
 };  
-
 
 const parseStringArray = (array: any): string[] => {
   if (!array || !Array.isArray(array)) {
@@ -212,5 +212,6 @@ const parseGender = (gender: any): Gender => {
 export default {
   toNewDiaryEntry,
   toNewPatientEntry,
-  toNewEntry  
+  toNewEntry,
+  parseString 
 };

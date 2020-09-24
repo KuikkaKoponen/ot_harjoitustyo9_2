@@ -31,20 +31,13 @@ router.post('/', (req, res) => {
   }
 });
 
-// JATKA TÄSTÄ
 router.post('/:id/entries', (req, res) => {
   try {
-    // kutsu vastaan, tutki type, 
-    console.log("POST ID:llä " + req.params.id);
+    const newEntry = utils.toNewEntry(req.body);
+    const id = utils.parseString(req.params.id);
+    patientService.addEntry(id, newEntry);
+    res.send(newEntry);
 
-    const newEntry = utils.toNewEntry(req.body); // tee tää eka
-    console.log("eeee");
-    console.log(newEntry);
-    // tallentaa listaan. 
-    //patientService.addEntry(newEntry); // sitte tää
-    
-    // kuittaa new entry tiedolla
-    res.send(" Kuittaus"); // vaihda 200
   } catch (e) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     res.status(400).send(e.message);

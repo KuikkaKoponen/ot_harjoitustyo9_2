@@ -1,6 +1,6 @@
 // hakee datan, muokkaa dataa ja lisää uutta dataa.
 import patients from '../../data/patientsTs';
-import {NonSensitivePatientEntry, PatientEntry, NewPatientEntry} from '../types';
+import {NonSensitivePatientEntry, PatientEntry, NewPatientEntry, Entry} from '../types';
 import diagnoseEntries from '../../data/diagnosesTs';
 
 const getEntries = () : PatientEntry[] => {
@@ -47,18 +47,35 @@ const findPatient = (id: string): PatientEntry => {
   return patient;  
 };
 
-/*
-const addEntry = (entry: Entry) => {
-  //tallenna uusi entry taulukkoon
+
+const addEntry = (id: string, newEntry: Entry): Entry => {
+  const patient =  patients.find(patient => patient.id === id); 
+  // tää pitäs tehä myöhemmin. Nyt id annettu
+  /*
+  const entryWithId = {
+    id2: Math.floor(Math.random() * 1000).toString(), // ID-generaattori
+    ...newEntry
+  };
+  */
+
+  if (patient && patient.entries) {
+    patient.entries.push(newEntry);
+    return newEntry;
+  } else if (patient) {
+    patient.entries = [newEntry];
+    return newEntry;
+  }
+  throw new Error('Incorrect or missing patient');
+
 };
-*/
+
 
 const addPatient = ( entry: NewPatientEntry ): PatientEntry => {
   const newPatientEntry = {
     id: Math.floor(Math.random() * 1000).toString(), // ID-generaattori
     ...entry
   };
-
+  console.log(newPatientEntry);
   patients.push(newPatientEntry);
   return newPatientEntry;
 };
@@ -67,5 +84,6 @@ export default {
   getEntries,
   addPatient,
   getNonSensitiveEntries,
+  addEntry,
   findPatient
 };
